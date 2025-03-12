@@ -1,31 +1,134 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hotel Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Hotel Registration - FoodShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Hotel Registration</h2>
-        <form method="POST" action="{{ url_for('hotel_register') }}">
-            <div class="form-group">
-                <input type="text" name="hotel_name" placeholder="Hotel Name" required>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <a href="{{ url_for('landing') }}" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-utensils text-green-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">FoodShare</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('landing') }}" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="{{ url_for('login') }}" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email" required>
+        </div>
+    </nav>
+
+    <!-- Registration Section -->
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 fade-in-up">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-hotel text-blue-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-gray-900">Hotel Registration</h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="{{ url_for('login') }}" class="font-medium text-blue-600 hover:text-blue-500">
+                        Sign in
+                    </a>
+                </p>
             </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Registration Form -->
+            <form class="mt-8 space-y-6" method="POST">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="hotel_name" class="block text-sm font-medium text-gray-700">Hotel Name</label>
+                        <input id="hotel_name" name="hotel_name" type="text" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter hotel name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input id="email" name="email" type="email" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter email address">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               placeholder="Create a password">
+                    </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                        <textarea id="address" name="address" required 
+                                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                                  placeholder="Enter complete address" rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input id="phone" name="phone" type="tel" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter phone number">
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="fas fa-user-plus text-blue-500 group-hover:text-blue-400"></i>
+                        </span>
+                        Register Hotel
+                    </button>
+                </div>
+            </form>
+
+            <!-- Additional Information -->
+            <div class="mt-6 bg-blue-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-blue-800">Why Register?</h3>
+                <ul class="mt-2 text-sm text-blue-700 list-disc list-inside">
+                    <li>Share surplus food with those in need</li>
+                    <li>Reduce food waste in your establishment</li>
+                    <li>Make a positive impact on the community</li>
+                    <li>Easy-to-use platform for managing donations</li>
+                </ul>
             </div>
-            <div class="form-group">
-                <input type="text" name="address" placeholder="Address" required>
-            </div>
-            <div class="form-group">
-                <input type="tel" name="phone" placeholder="Phone Number" required>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
     </div>
 </body>
 </html> 

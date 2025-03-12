@@ -364,14 +364,19 @@ def request_donation():
             flash('This donation is no longer available.')
             return redirect(url_for('org_dashboard'))
         
+        # Get hotel details for phone number
+        hotel = hotels.find_one({'_id': ObjectId(donation['hotel_id'])})
+        
         request_data = {
-            'donation_id': str(donation_id),  # Store as string consistently
+            'donation_id': str(donation_id),
             'food_type': donation['food_type'],
             'quantity': donation['quantity'],
             'hotel_id': donation['hotel_id'],
             'hotel_name': donation['hotel_name'],
-            'org_id': str(session['user_id']),  # Store as string consistently
+            'hotel_phone': hotel['phone'] if hotel else 'Not available',
+            'org_id': str(session['user_id']),
             'org_name': org['org_name'],
+            'org_phone': org['phone'],
             'status': 'pending',
             'requested_at': datetime.utcnow()
         }
@@ -664,6 +669,9 @@ def accept_delivery(donation_id):
             flash('Donation not found')
             return redirect(url_for('volunteer_dashboard'))
             
+        # Get hotel details for phone number
+        hotel = hotels.find_one({'_id': ObjectId(donation['hotel_id'])})
+            
         # Create a delivery request
         delivery_request = {
             'donation_id': str(donation_id),
@@ -671,8 +679,10 @@ def accept_delivery(donation_id):
             'quantity': donation['quantity'],
             'hotel_id': donation['hotel_id'],
             'hotel_name': donation['hotel_name'],
+            'hotel_phone': hotel['phone'] if hotel else 'Not available',
             'volunteer_id': str(session['user_id']),
             'volunteer_name': volunteer['full_name'],
+            'volunteer_phone': volunteer['phone'],
             'status': 'pending',
             'type': 'delivery',  # To distinguish from organization requests
             'requested_at': datetime.utcnow()
@@ -687,7 +697,8 @@ def accept_delivery(donation_id):
             {'$set': {
                 'delivery_status': 'pending',
                 'volunteer_id': session['user_id'],
-                'volunteer_name': volunteer['full_name']
+                'volunteer_name': volunteer['full_name'],
+                'volunteer_phone': volunteer['phone']
             }}
         )
         

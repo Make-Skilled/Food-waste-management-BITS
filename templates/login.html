@@ -1,42 +1,140 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Login - FoodShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Login</h2>
-        
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="flash-message">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        <form method="POST" action="{{ url_for('login') }}">
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email" required>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <a href="{{ url_for('landing') }}" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-utensils text-green-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">FoodShare</span>
+                    </a>
+                </div>
+                <div class="flex items-center">
+                    <a href="{{ url_for('landing') }}" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 fade-in-up">
+            <!-- Header -->
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900">Welcome Back</h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Don't have an account? 
+                    <a href="#" onclick="scrollToRegister()" class="font-medium text-green-600 hover:text-green-500">
+                        Register here
+                    </a>
+                </p>
             </div>
-            <div class="form-group">
-                <select name="user_type" required>
-                    <option value="hotel">Hotel</option>
-                    <option value="organization">Organization</option>
-                    <option value="volunteer">Volunteer</option>
-                </select>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Login Form -->
+            <form class="mt-8 space-y-6" method="POST">
+                <div class="rounded-md shadow-sm -space-y-px">
+                    <div>
+                        <label for="email" class="sr-only">Email address</label>
+                        <input id="email" name="email" type="email" required 
+                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm" 
+                               placeholder="Email address">
+                    </div>
+                    <div>
+                        <label for="password" class="sr-only">Password</label>
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm" 
+                               placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <select name="user_type" required 
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md">
+                            <option value="">Select User Type</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="organization">Organization</option>
+                            <option value="volunteer">Volunteer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="fas fa-sign-in-alt text-green-500 group-hover:text-green-400"></i>
+                        </span>
+                        Sign in
+                    </button>
+                </div>
+            </form>
+
+            <!-- Registration Links -->
+            <div class="mt-10">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-gray-50 text-gray-500">Or register as</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-3 gap-3">
+                    <a href="{{ url_for('hotel_register') }}" 
+                       class="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200">
+                        <i class="fas fa-hotel mr-2"></i>
+                        Hotel
+                    </a>
+                    <a href="{{ url_for('org_register') }}" 
+                       class="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-purple-700 bg-purple-100 hover:bg-purple-200">
+                        <i class="fas fa-hands-helping mr-2"></i>
+                        Organization
+                    </a>
+                    <a href="{{ url_for('volunteer_register') }}" 
+                       class="flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200">
+                        <i class="fas fa-user-friends mr-2"></i>
+                        Volunteer
+                    </a>
+                </div>
             </div>
-            <button type="submit">Login</button>
-        </form>
-        <div class="register-links">
-            <a href="{{ url_for('hotel_register') }}">Register as Hotel</a>
-            <a href="{{ url_for('org_register') }}">Register as Organization</a>
-            <a href="{{ url_for('volunteer_register') }}">Register as Volunteer</a>
         </div>
     </div>
 </body>

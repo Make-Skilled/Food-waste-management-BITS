@@ -1,39 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Organization Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Organization Registration - FoodShare</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Organization Registration</h2>
-        <form method="POST" action="{{ url_for('org_register') }}">
-            <div class="form-group">
-                <input type="text" name="org_name" placeholder="Organization Name" required>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <a href="{{ url_for('landing') }}" class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-utensils text-green-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-800">FoodShare</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('landing') }}" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="{{ url_for('login') }}" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email" required>
+        </div>
+    </nav>
+
+    <!-- Registration Section -->
+    <div class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 fade-in-up">
+            <!-- Header -->
+            <div class="text-center">
+                <div class="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-hands-helping text-purple-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold text-gray-900">Organization Registration</h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Already have an account? 
+                    <a href="{{ url_for('login') }}" class="font-medium text-purple-600 hover:text-purple-500">
+                        Sign in
+                    </a>
+                </p>
             </div>
-            <div class="form-group">
-                <input type="password" name="password" placeholder="Password" required>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                        <p>{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Registration Form -->
+            <form class="mt-8 space-y-6" method="POST">
+                <div class="rounded-md shadow-sm space-y-4">
+                    <div>
+                        <label for="org_name" class="block text-sm font-medium text-gray-700">Organization Name</label>
+                        <input id="org_name" name="org_name" type="text" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter organization name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input id="email" name="email" type="email" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter email address">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input id="password" name="password" type="password" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm" 
+                               placeholder="Create a password">
+                    </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                        <textarea id="address" name="address" required 
+                                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm" 
+                                  placeholder="Enter complete address" rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input id="phone" name="phone" type="tel" required 
+                               class="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm" 
+                               placeholder="Enter phone number">
+                    </div>
+                    <div>
+                        <label for="org_type" class="block text-sm font-medium text-gray-700">Organization Type</label>
+                        <select id="org_type" name="org_type" required 
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm rounded-md">
+                            <option value="">Select organization type</option>
+                            <option value="NGO">NGO</option>
+                            <option value="Charity">Charity</option>
+                            <option value="Religious">Religious Organization</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit" 
+                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="fas fa-user-plus text-purple-500 group-hover:text-purple-400"></i>
+                        </span>
+                        Register Organization
+                    </button>
+                </div>
+            </form>
+
+            <!-- Additional Information -->
+            <div class="mt-6 bg-purple-50 rounded-lg p-4">
+                <h3 class="text-sm font-medium text-purple-800">Why Register?</h3>
+                <ul class="mt-2 text-sm text-purple-700 list-disc list-inside">
+                    <li>Access surplus food from local hotels</li>
+                    <li>Help distribute food to those in need</li>
+                    <li>Coordinate with volunteers for deliveries</li>
+                    <li>Make a difference in your community</li>
+                </ul>
             </div>
-            <div class="form-group">
-                <input type="text" name="address" placeholder="Address" required>
-            </div>
-            <div class="form-group">
-                <input type="tel" name="phone" placeholder="Phone Number" required>
-            </div>
-            <div class="form-group">
-                <select name="org_type" required>
-                    <option value="">Select Organization Type</option>
-                    <option value="orphanage">Orphanage</option>
-                    <option value="oldage_home">Old Age Home</option>
-                    <option value="school">School</option>
-                </select>
-            </div>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
     </div>
 </body>
 </html> 
