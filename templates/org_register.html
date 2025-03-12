@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organization Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Organization Registration</h2>
+        <form method="POST" action="{{ url_for('org_register') }}">
+            <div class="form-group">
+                <input type="text" name="org_name" placeholder="Organization Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="address" placeholder="Address" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+            </div>
+            <div class="form-group">
+                <select name="org_type" required>
+                    <option value="">Select Organization Type</option>
+                    <option value="orphanage">Orphanage</option>
+                    <option value="oldage_home">Old Age Home</option>
+                    <option value="school">School</option>
+                </select>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+</body>
+</html> 

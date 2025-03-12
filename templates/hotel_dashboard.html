@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-blue-800 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold">{{ hotel_name }}</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('hotel_dashboard') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700 bg-blue-900">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('hotel_donations') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700">
+                    <i class="fas fa-gift mr-3"></i> My Donations
+                </a>
+                <a href="{{ url_for('hotel_all_requests') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700">
+                    <i class="fas fa-inbox mr-3"></i> All Requests
+                </a>
+                <a href="{{ url_for('logout') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-hidden">
+            <div class="p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Dashboard Overview</h1>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Total Donations</h3>
+                        <p class="text-3xl font-bold text-blue-600">{{ stats.total_donations }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Pending Requests</h3>
+                        <p class="text-3xl font-bold text-yellow-600">{{ stats.pending_requests }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Accepted Requests</h3>
+                        <p class="text-3xl font-bold text-green-600">{{ stats.accepted_requests }}</p>
+                    </div>
+                </div>
+
+                <!-- Add Donation Form -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Donation</h2>
+                    <form method="POST" action="{{ url_for('add_donation') }}" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Food Type</label>
+                            <input type="text" name="food_type" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Quantity (servings)</label>
+                            <input type="number" name="quantity" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Expiry Date & Time</label>
+                            <input type="datetime-local" name="expiry" required
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <button type="submit" 
+                                class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                            Add Donation
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
+                    <div class="space-y-4">
+                        {% if recent_activities %}
+                            {% for activity in recent_activities %}
+                            <div class="border-l-4 border-blue-500 pl-4 py-2 bg-gray-50">
+                                <p class="text-sm text-gray-500">
+                                    {{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                                </p>
+                                <p class="text-gray-800">{{ activity.description }}</p>
+                                <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full
+                                    {% if activity.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                    {% elif activity.status == 'accepted' %}bg-green-100 text-green-800
+                                    {% else %}bg-red-100 text-red-800{% endif %}">
+                                    {{ activity.status }}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-gray-500 text-center py-4">No recent activity</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

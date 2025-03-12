@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="landing-nav">
+        <div class="logo">
+            <h1>FoodShare</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#contact">Contact</a>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Connecting Excess Food with Those in Need</h1>
+            <p>Join our mission to reduce food waste and help communities thrive</p>
+            <div class="cta-buttons">
+                <a href="#join-us" class="primary-btn">Get Started</a>
+                <a href="#learn-more" class="secondary-btn">Learn More</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Join Us Section -->
+    <section id="join-us" class="join-section">
+        <h2>Join Our Network</h2>
+        <div class="cards-container">
+            <div class="card">
+                <i class="fas fa-hotel"></i>
+                <h3>Hotels & Restaurants</h3>
+                <p>Donate excess food and make a difference in your community</p>
+                <a href="{{ url_for('hotel_register') }}" class="register-btn">Register as Hotel</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-building"></i>
+                <h3>Organizations</h3>
+                <p>Connect with food donors and help distribute to those in need</p>
+                <a href="{{ url_for('org_register') }}" class="register-btn">Register as Organization</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-hands-helping"></i>
+                <h3>Volunteers</h3>
+                <p>Help deliver food and support your local community</p>
+                <a href="{{ url_for('volunteer_register') }}" class="register-btn">Register as Volunteer</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Hotels Register & Donate</h3>
+                <p>Hotels and restaurants register and post their excess food donations</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Organizations Request</h3>
+                <p>Organizations view and request available donations</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Volunteers Deliver</h3>
+                <p>Volunteers help transport food from donors to organizations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact">
+        <h2>Our Impact</h2>
+        <div class="impact-stats">
+            <div class="stat">
+                <h3>1000+</h3>
+                <p>Meals Donated</p>
+            </div>
+            <div class="stat">
+                <h3>50+</h3>
+                <p>Partner Hotels</p>
+            </div>
+            <div class="stat">
+                <h3>30+</h3>
+                <p>Organizations</p>
+            </div>
+            <div class="stat">
+                <h3>100+</h3>
+                <p>Active Volunteers</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-envelope"></i> contact@foodshare.com</p>
+                <p><i class="fas fa-phone"></i> +1 234 567 8900</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 FoodShare. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 

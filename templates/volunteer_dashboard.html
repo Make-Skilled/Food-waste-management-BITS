@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Volunteer Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-green-800 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold">{{ volunteer_name }}</h2>
+                <p class="text-green-200 text-sm mt-1">Volunteer</p>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('volunteer_dashboard') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700 bg-green-900">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('volunteer_requests') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700">
+                    <i class="fas fa-inbox mr-3"></i> My Requests
+                </a>
+                <a href="{{ url_for('logout') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Urgent Deliveries</h1>
+                    <div class="text-gray-600">
+                        <i class="fas fa-clock mr-2"></i>
+                        Current Time: {{ current_time.strftime('%I:%M %p') }}
+                    </div>
+                </div>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Urgent Donations -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% if urgent_donations %}
+                        {% for donation in urgent_donations %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden border-l-4 border-red-500">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-800">{{ donation.food_type }}</h3>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800">
+                                        {{ donation.minutes_until_expiry|round|int }} mins left
+                                    </span>
+                                </div>
+                                
+                                <div class="space-y-4">
+                                    <!-- Donation Details -->
+                                    <div class="space-y-2 text-gray-600">
+                                        <p><i class="fas fa-utensils mr-2"></i>{{ donation.quantity }} servings</p>
+                                        <p><i class="fas fa-clock mr-2"></i>Expires: {{ donation.expiry.strftime('%I:%M %p') }}</p>
+                                    </div>
+
+                                    <!-- Pickup Details -->
+                                    <div class="bg-blue-50 p-3 rounded-lg">
+                                        <h4 class="font-semibold text-blue-800 mb-2">Pickup From:</h4>
+                                        <p class="text-blue-700">
+                                            <i class="fas fa-building mr-2"></i>{{ donation.hotel_name }}
+                                        </p>
+                                    </div>
+
+                                    <!-- Accept Button -->
+                                    <form method="POST" action="{{ url_for('accept_delivery', donation_id=donation._id) }}" class="mt-4">
+                                        <button type="submit" 
+                                                class="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200">
+                                            Accept Donation
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-span-full bg-white rounded-lg shadow-md p-8 text-center">
+                            <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
+                            <p class="text-gray-500">No urgent deliveries at the moment.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

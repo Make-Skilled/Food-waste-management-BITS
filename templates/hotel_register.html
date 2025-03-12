@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Hotel Registration</h2>
+        <form method="POST" action="{{ url_for('hotel_register') }}">
+            <div class="form-group">
+                <input type="text" name="hotel_name" placeholder="Hotel Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="address" placeholder="Address" required>
+            </div>
+            <div class="form-group">
+                <input type="tel" name="phone" placeholder="Phone Number" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+</body>
+</html> 

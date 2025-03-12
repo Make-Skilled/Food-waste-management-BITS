@@ -1,0 +1,276 @@
+/* Landing Page Specific Styles */
+.landing-nav {
+    background: white;
+    padding: 20px 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.landing-nav .logo h1 {
+    color: #1a73e8;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #1a73e8;
+}
+
+.login-btn {
+    background: #1a73e8;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: #1557b0;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                url('/static/images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.primary-btn, .secondary-btn {
+    padding: 15px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+
+.primary-btn {
+    background: #1a73e8;
+    color: white;
+}
+
+.secondary-btn {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.primary-btn:hover, .secondary-btn:hover {
+    transform: translateY(-3px);
+}
+
+/* Join Section */
+.join-section {
+    padding: 80px 20px;
+    background: #f8f9fa;
+}
+
+.cards-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card i {
+    font-size: 2.5em;
+    color: #1a73e8;
+    margin-bottom: 20px;
+}
+
+.register-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #1a73e8;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.register-btn:hover {
+    background: #1557b0;
+}
+
+/* How It Works Section */
+.how-it-works {
+    padding: 80px 20px;
+    background: white;
+}
+
+.steps {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.step {
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #1a73e8;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-weight: bold;
+}
+
+/* Impact Section */
+.impact {
+    padding: 80px 20px;
+    background: #f8f9fa;
+    text-align: center;
+}
+
+.impact-stats {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.stat {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.stat h3 {
+    font-size: 2.5em;
+    color: #1a73e8;
+    margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: white;
+    padding: 50px 20px 20px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    margin-bottom: 30px;
+}
+
+.social-links {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.5em;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #1a73e8;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .landing-nav {
+        padding: 15px 20px;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+    
+    .hero h1 {
+        font-size: 2.5em;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+} 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Donations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-blue-800 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold">{{ hotel_name }}</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('hotel_dashboard') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('hotel_donations') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700 bg-blue-900">
+                    <i class="fas fa-gift mr-3"></i> My Donations
+                </a>
+                <a href="{{ url_for('hotel_all_requests') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700">
+                    <i class="fas fa-inbox mr-3"></i> All Requests
+                </a>
+                <a href="{{ url_for('logout') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-blue-700 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-hidden">
+            <div class="p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">My Donations</h1>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Donations Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% if donations %}
+                        {% for donation in donations %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-800">{{ donation.food_type }}</h3>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                        {% if donation.status == 'available' %}bg-green-100 text-green-800
+                                        {% elif donation.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-blue-100 text-blue-800{% endif %}">
+                                        {{ donation.status }}
+                                    </span>
+                                </div>
+                                <div class="space-y-2 text-gray-600">
+                                    <p><i class="fas fa-utensils mr-2"></i>{{ donation.quantity }} servings</p>
+                                    <p><i class="fas fa-clock mr-2"></i>Added: {{ donation.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    <p><i class="fas fa-calendar-alt mr-2"></i>Expires: {{ donation.expiry.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    <p><i class="fas fa-inbox mr-2"></i>Requests: {{ donation.request_count }}</p>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="{{ url_for('donation_requests_view', donation_id=donation._id|string) }}"
+                                       class="block w-full text-center bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                                        View Requests ({{ donation.request_count }})
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-span-full bg-white rounded-lg shadow-md p-8 text-center">
+                            <p class="text-gray-500 mb-4">No donations added yet.</p>
+                            <a href="{{ url_for('hotel_dashboard') }}"
+                               class="inline-block bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200">
+                                Add New Donation
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

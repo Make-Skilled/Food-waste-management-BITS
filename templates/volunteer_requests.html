@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Delivery Requests</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-green-800 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold">{{ volunteer_name }}</h2>
+                <p class="text-green-200 text-sm mt-1">Volunteer</p>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('volunteer_dashboard') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('volunteer_requests') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700 bg-green-900">
+                    <i class="fas fa-inbox mr-3"></i> My Requests
+                </a>
+                <a href="{{ url_for('logout') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-green-700 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-hidden">
+            <div class="p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">My Delivery Requests</h1>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Requests List -->
+                <div class="space-y-6">
+                    {% if requests %}
+                        {% for request in requests %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-800">{{ request.donation_details.food_type }}</h3>
+                                        <p class="text-gray-600 mt-1">
+                                            <i class="fas fa-building mr-2"></i>{{ request.hotel_name }}
+                                        </p>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                        {% if request.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% elif request.status == 'accepted' %}bg-green-100 text-green-800
+                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ request.status }}
+                                    </span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500">Quantity</p>
+                                        <p class="font-semibold">{{ request.quantity }} servings</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500">Requested At</p>
+                                        <p class="font-semibold">{{ request.requested_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    </div>
+                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                        <p class="text-sm text-gray-500">Expiry</p>
+                                        <p class="font-semibold">{{ request.donation_details.expiry.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    </div>
+                                </div>
+
+                                {% if request.status == 'accepted' %}
+                                <div class="mt-4 bg-green-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-green-800 mb-2">Delivery Instructions</h4>
+                                    <p class="text-green-700">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>Pickup from: {{ request.hotel_name }}
+                                    </p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                            <i class="fas fa-inbox text-4xl text-gray-400 mb-3"></i>
+                            <p class="text-gray-500">You haven't made any delivery requests yet.</p>
+                            <a href="{{ url_for('volunteer_dashboard') }}" 
+                               class="inline-block mt-4 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-200">
+                                Find Donations
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

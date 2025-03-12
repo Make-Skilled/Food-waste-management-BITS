@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <select name="user_type" required>
+                    <option value="hotel">Hotel</option>
+                    <option value="organization">Organization</option>
+                    <option value="volunteer">Volunteer</option>
+                </select>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-links">
+            <a href="{{ url_for('hotel_register') }}">Register as Hotel</a>
+            <a href="{{ url_for('org_register') }}">Register as Organization</a>
+            <a href="{{ url_for('volunteer_register') }}">Register as Volunteer</a>
+        </div>
+    </div>
+</body>
+</html> 

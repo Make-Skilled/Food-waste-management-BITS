@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Organization Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-indigo-800 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold">{{ org_name }}</h2>
+                <p class="text-indigo-200 text-sm mt-1">{{ org_type }}</p>
+            </div>
+            <nav class="mt-6">
+                <a href="{{ url_for('org_dashboard') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-indigo-700 bg-indigo-900">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('logout') }}" 
+                   class="flex items-center px-6 py-3 text-white hover:bg-indigo-700 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-hidden">
+            <div class="p-8">
+                <h1 class="text-3xl font-bold text-gray-800 mb-8">Organization Dashboard</h1>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- My Requests Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Pending Requests</h3>
+                        <p class="text-3xl font-bold text-yellow-600">{{ my_requests|selectattr('status', 'equalto', 'pending')|list|length }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Accepted Requests</h3>
+                        <p class="text-3xl font-bold text-green-600">{{ my_requests|selectattr('status', 'equalto', 'accepted')|list|length }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-gray-500 text-sm font-semibold">Total Requests</h3>
+                        <p class="text-3xl font-bold text-blue-600">{{ my_requests|length }}</p>
+                    </div>
+                </div>
+
+                <!-- Available Donations -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Available Food Donations</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% if available_donations %}
+                            {% for donation in available_donations %}
+                            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition duration-200">
+                                <div class="p-6">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h3 class="text-lg font-semibold text-gray-800">{{ donation.food_type }}</h3>
+                                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                            Available
+                                        </span>
+                                    </div>
+                                    <div class="space-y-2 text-gray-600">
+                                        <p><i class="fas fa-building mr-2"></i>From: {{ donation.hotel_name }}</p>
+                                        <p><i class="fas fa-utensils mr-2"></i>{{ donation.quantity }} servings</p>
+                                        <p><i class="fas fa-clock mr-2"></i>Expires: {{ donation.expiry.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    </div>
+                                    {% if donation.status == 'available' %}
+                                    <form method="POST" action="{{ url_for('request_donation') }}" class="mt-4">
+                                        <input type="hidden" name="donation_id" value="{{ donation._id }}">
+                                        <button type="submit" 
+                                                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition duration-200">
+                                            Request Donation
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-span-full text-center py-8 text-gray-500">
+                                <i class="fas fa-box-open text-4xl mb-3"></i>
+                                <p>No available donations at the moment.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- My Requests -->
+                <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">My Recent Requests</h2>
+                    <div class="space-y-4">
+                        {% if my_requests %}
+                            {% for request in my_requests %}
+                            <div class="border-l-4 
+                                {% if request.status == 'pending' %}border-yellow-500
+                                {% elif request.status == 'accepted' %}border-green-500
+                                {% else %}border-red-500{% endif %} 
+                                bg-white rounded-r-lg shadow-sm p-4">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">{{ request.food_type }}</h3>
+                                        <p class="text-sm text-gray-600">From: {{ request.hotel_name }}</p>
+                                        <p class="text-sm text-gray-600">Requested: {{ request.requested_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                                    </div>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                        {% if request.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% elif request.status == 'accepted' %}bg-green-100 text-green-800
+                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ request.status }}
+                                    </span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-8 text-gray-500">
+                                <p>No requests made yet.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
