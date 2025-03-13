@@ -36,7 +36,7 @@ def hotel_register():
             'password': generate_password_hash(request.form['password']),
             'address': request.form['address'],
             'phone': request.form['phone'],
-            'created_at': datetime.utcnow()
+            'created_at': datetime.now()
         }
         
         if hotels.find_one({'email': hotel_data['email']}):
@@ -60,7 +60,7 @@ def org_register():
             'address': request.form['address'],
             'phone': request.form['phone'],
             'org_type': request.form['org_type'],
-            'created_at': datetime.utcnow()
+            'created_at': datetime.now()
         }
         
         if organizations.find_one({'email': org_data['email']}):
@@ -81,7 +81,7 @@ def volunteer_register():
             'email': request.form['email'],
             'password': generate_password_hash(request.form['password']),
             'phone': request.form['phone'],
-            'created_at': datetime.utcnow()
+            'created_at': datetime.now()
         }
         
         if volunteers.find_one({'email': volunteer_data['email']}):
@@ -324,6 +324,7 @@ def add_donation():
     
     try:
         hotel = hotels.find_one({'_id': ObjectId(session['user_id'])})
+        ist = pytz.timezone('Asia/Kolkata')
         donation_data = {
             'hotel_id': session['user_id'],
             'hotel_name': hotel['hotel_name'],
@@ -331,7 +332,7 @@ def add_donation():
             'quantity': int(request.form['quantity']),
             'expiry': datetime.strptime(request.form['expiry'], '%Y-%m-%dT%H:%M'),
             'status': 'available',
-            'created_at': datetime.utcnow()
+            'created_at': datetime.now()
         }
         
         donations.insert_one(donation_data)
@@ -378,7 +379,7 @@ def request_donation():
             'org_name': org['org_name'],
             'org_phone': org['phone'],
             'status': 'pending',
-            'requested_at': datetime.utcnow()
+            'requested_at': datetime.now()
         }
         
         donation_requests.insert_one(request_data)
@@ -422,7 +423,7 @@ def handle_request(request_id, action):
                 {'_id': ObjectId(request_id)},
                 {'$set': {
                     'status': new_status,
-                    'updated_at': datetime.utcnow()
+                    'updated_at': datetime.now()
                 }}
             )
         else:
@@ -431,7 +432,7 @@ def handle_request(request_id, action):
                 {'_id': ObjectId(request_id)},
                 {'$set': {
                     'status': new_status,
-                    'updated_at': datetime.utcnow()
+                    'updated_at': datetime.now()
                 }}
             )
         
@@ -685,7 +686,7 @@ def accept_delivery(donation_id):
             'volunteer_phone': volunteer['phone'],
             'status': 'pending',
             'type': 'delivery',  # To distinguish from organization requests
-            'requested_at': datetime.utcnow()
+            'requested_at': datetime.now()
         }
         
         # Insert the delivery request
